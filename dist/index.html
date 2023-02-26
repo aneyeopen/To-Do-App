@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>To Do App</title>
+    <script defer src="main.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">To Do</div>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-menu">
+            <div id="all-time-sidebar" class="sidebar-link clickable sidebar-active">All Time</div>
+            <div id="today-sidebar" class="sidebar-link clickable">Today</div>
+            <div id="this-week-sidebar" class="sidebar-link clickable">This Week</div>
+            <div id="projects-sidebar" class="sidebar-link clickable">Projects</div>
+            <div id="projects-container"></div>
+            <div id="notes-sidebar" class="sidebar-link clickable">Notes</div>
+            <button id="add-button">+</button>
+        </div>
+    </div>
+    <div class="main">
+        
+    </div>
+
+    <!--- Hidden Items -->
+    <section class="modal hidden">
+        <form action="" class="create-new">
+            <div class="modal-header">
+                <div class="modal-title">Create New</div>
+                <div class="modal-close clickable">X</div>
+            </div>
+            <div class="modal-sidebar">
+                <div id="modal-to-do" class="sidebar-link clickable modal-sidebar-active"></div>
+                <div id="modal-project" class="sidebar-link clickable"></div>
+                <div id="modal-note" class="sidebar-link clickable"></div>
+            </div>
+            <div class="modal-main">
+                <textarea class="create-new__input" placeholder="Title"
+                id="modal-to-do-title" name="modal-to-do" maxlength="40" required></textarea>
+                <textarea class="create-new__input create-new-input-large"
+                placeholder="Details" id="modal-to-do-details"
+                name="modal-to-do" required></textarea>
+                <input type="submit" class="create-new__to-do-submit" id="to-do-submit" value="Add To Do">
+
+                <div class="create-new__date">
+                    <div class="create-new__date-title">Due Date:</div>
+                    <input type="date" class="create-new__date-input" id="to-do-date"
+                    name="modal-to-do" required>
+                </div>
+
+                <div class="create-new__priority-container">
+                    <div class="create-new__priority">
+                        <div class="create-new__priority-title">Priority:</div>
+                        <input type="radio" id="create-new__low"
+                        name="create-new__priority" value="low" required>
+                        <label for="create-new__low" class="create-new__priority-button-low">Low</label>
+
+                        <input type="radio" id="create-new__medium"
+                        name="create-new__priority" value="medium" required>
+                        <label for="create-new__medium" class="create-new__priority-button-medium">Medium</label>
+
+                        <input type="radio" id="create-new__high"
+                        name="create-new__priority" value="high" required>
+                        <label for="create-new__high" class="create-new__priority-button-high">High</label>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </section>
+
+
+
+
+    <div class="overlay hidden"></div>
+
+
+</body>
+</html>
