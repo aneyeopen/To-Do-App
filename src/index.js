@@ -1,5 +1,16 @@
 import './style.css';
-import { domManipulator } from './to-do-functions';
+import { domManipulator, todoManager } from './to-do-functions';
+
+
+// storage //
+
+const todos = JSON.parse(localStorage.getItem('todos')) || {
+    "home": [],
+    "today": [],
+    "week": []                                           
+    };
+
+
 
 // main events //
 
@@ -21,6 +32,8 @@ openForm.addEventListener('click', e => domManipulator.openModal(modal, overlay)
 const closeForm = document.querySelector(".modal-close");
 
 closeForm.addEventListener('click', e => domManipulator.closeModal(modal, overlay));
+
+submitForm.addEventListener('click', e => todoManager.newToDo())
 
 
 

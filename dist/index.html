@@ -19,7 +19,7 @@
             <div id="this-week-sidebar" class="sidebar-link clickable">This Week</div>
             <div id="projects-sidebar" class="sidebar-link clickable">Projects</div>
             <div id="projects-container"></div>
-            <div id="notes-sidebar" class="sidebar-link clickable">Notes</div>
+            <div id="add-project-sidebar" class="sidebar-link clickable">Add Project</div>
             <button id="add-button">+</button>
         </div>
     </div>
@@ -27,9 +27,11 @@
         
     </div>
 
-    <!--- Hidden Items -->
+    <!-------- Hidden Items ------->
+
+    <!--  To Do Modal  -->
     <section class="modal hidden">
-        <form action="" class="create-new">
+        <form action="" class="create-new" id="create-new-form">
             <div class="modal-header">
                 <div class="modal-title">Create New</div>
                 <div class="modal-close clickable">X</div>
@@ -50,23 +52,15 @@
                 <div class="create-new__date">
                     <div class="create-new__date-title">Due Date:</div>
                     <input type="date" class="create-new__date-input" id="to-do-date"
-                    name="modal-to-do" required>
+                    name="modal-to-do-date">
                 </div>
 
-                <div class="create-new__priority-container">
-                    <div class="create-new__priority">
-                        <div class="create-new__priority-title">Priority:</div>
-                        <input type="radio" id="create-new__low"
-                        name="create-new__priority" value="low" required>
-                        <label for="create-new__low" class="create-new__priority-button-low">Low</label>
-
-                        <input type="radio" id="create-new__medium"
-                        name="create-new__priority" value="medium" required>
-                        <label for="create-new__medium" class="create-new__priority-button-medium">Medium</label>
-
-                        <input type="radio" id="create-new__high"
-                        name="create-new__priority" value="high" required>
-                        <label for="create-new__high" class="create-new__priority-button-high">High</label>
+                <div class="create-new__urgent-container">
+                    <div class="create-new__urgent">
+                        <div class="create-new__urgent-title">Priority:</div>
+                        <input type="checkbox" id="create-new__urgent"
+                        name="create-new__urgent" value="urgent">
+                        <label for="create-new__urgent" class="create-new__urgent-button">Urgent</label>
 
                     </div>
                 </div>
@@ -77,7 +71,7 @@
 
 
 
-
+<!-- background overlay  -->
     <div class="overlay hidden"></div>
 
 
