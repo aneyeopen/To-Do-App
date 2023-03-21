@@ -5,9 +5,10 @@ import { domManipulator, todoManager } from './to-do-functions';
 // storage //
 
 const todos = JSON.parse(localStorage.getItem('todos')) || {
-    "home": [],
+    "all time": [],
     "today": [],
-    "week": []                                           
+    "week": [],
+    "urgent": []                                           
     };
 
 
@@ -15,6 +16,7 @@ const todos = JSON.parse(localStorage.getItem('todos')) || {
 // main events //
 
 const display = document.querySelector('.main');
+const form = document.getElementById("create-new-form");
 
 
 //Add a new item//
@@ -33,7 +35,12 @@ const closeForm = document.querySelector(".modal-close");
 
 closeForm.addEventListener('click', e => domManipulator.closeModal(modal, overlay));
 
-submitForm.addEventListener('click', e => todoManager.newToDo())
+
+
+form.addEventListener('submit', e => {
+    todoManager.newToDo(e, todos, form); 
+    domManipulator.closeModal(modal, overlay);
+});
 
 
 

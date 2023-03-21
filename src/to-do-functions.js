@@ -18,7 +18,19 @@ export const domManipulator = (function () {
     }
 
 
-    function showToDos(toDos, element){
+    function showAllToDo(todos, element){
+
+        const toDoList = todos[toDoManager.getCurrentProject()];
+
+        element.innerHTML = "";
+
+
+        if (toDoList.length == 0) {
+            return;
+        }
+
+
+
 
     }
 
@@ -30,7 +42,7 @@ export const domManipulator = (function () {
 
 export const todoManager = (function () {
 
-    const currentProject = "home";
+    const currentProject = "all time";
 
     const todoList = [];
 
@@ -64,17 +76,31 @@ export const todoManager = (function () {
         const toDoTitle = (document.querySelector('#modal-to-do-title')).value;
         const toDoDetails = (document.querySelector('#modal-to-do-details')).value;
         const toDoDate = (document.querySelector('#to-do-date')).value;
-        const toDoPriority = (document.querySelector('[name="create-new__urgent"]:checked')).value;
+        const toDoPriority = (document.querySelector('[name="create-new__urgent"]:checked'));
 
         const toDoProject = getCurrentProject();
 
+        console.log(toDoPriority);
+        console.log(toDoTitle);
 
 
-        const newToDo = (toDoTitle, toDoDate, toDoDetails, toDoPriority, toDoProject);
+
+        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, toDoProject);
+
 
         todoList[currentProject].push(newToDo);
 
+        if (toDoProject != "all time") {
+            todoList["all time"].push(newToDo);
+        }
+
+        if (toDoPriority === 'urgent') {
+            todoList["urgent"].push(newToDo);
+        }
+
     }
+
+
 
     return {
         getCurrentProject,
