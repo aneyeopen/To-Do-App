@@ -18,16 +18,43 @@ export const domManipulator = (function () {
     }
 
 
-    function showAllToDo(todos, element){
+    function showToDos(todos, element){
 
-        const toDoList = todos[toDoManager.getCurrentProject()];
 
         element.innerHTML = "";
 
 
-        if (toDoList.length == 0) {
+        if (todos[toDoManager.getCurrentProject()].length == 0) {
             return;
         }
+
+        for (let i = 0; i < todos[toDoManager.getCurrentProject()].length; i++) {
+            const toDoContainer = document.createElement("li");
+            toDoContainer.classList.add("to-do-container");
+
+            
+            const toDoCheck = document.createElement("div");
+            toDoCheck.classList.add("to-do-check unchecked");
+
+            const toDoTitle = document.createElement("div");
+            toDoTitle.innerHTML = todos[toDoManager.getCurrentProject()][i].name;
+            toDoTitle.classList.add("to-do-title");
+
+            // to do date //
+
+            const toDoDetails = document.createElement("div");
+            toDoDetails.innerHTML = todos[toDoManager.getCurrentProject()][i].details;
+            toDoTitle.classList.add("to-do-details");
+
+            const toDoUrgent = document.createElement("div");
+            toDoCheck.classList.add("to-do-urgent urgent-unchecked");
+
+            todos[toDoManager.getCurrentProject()][i].index = i;
+        }
+
+
+
+
 
 
 
@@ -57,14 +84,15 @@ export const todoManager = (function () {
 
 
     // to do factory function
-    function todoFactory(name, date, details, urgent, project, checked=false) {
+    function todoFactory(name, date, details, urgent, project, checked=false, index) {
         return {
             name,
             date,
             details,
             urgent,
             project,
-            checked
+            checked,
+            index
         }
     };
 
@@ -85,7 +113,7 @@ export const todoManager = (function () {
 
 
 
-        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, toDoProject);
+        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, toDoProject, null);
 
 
         todoList[currentProject].push(newToDo);
@@ -98,6 +126,11 @@ export const todoManager = (function () {
             todoList["urgent"].push(newToDo);
         }
 
+    }
+
+    function indexToDo(todo, listIndex) {
+        todo.index = listIndex;
+        return;
     }
 
 
