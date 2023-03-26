@@ -15,8 +15,10 @@ const todos = JSON.parse(localStorage.getItem('todos')) || {
 
 // main events //
 
-const display = document.querySelector('.main');
+const display = document.querySelector('.to-do-list');
 const form = document.getElementById("create-new-form");
+
+domManipulator.showToDos(todos, display);
 
 
 //Add a new item//
@@ -39,7 +41,8 @@ closeForm.addEventListener('click', e => domManipulator.closeModal(modal, overla
 
 form.addEventListener('submit', e => {
     todoManager.newToDo(e, todos, form); 
-    domManipulator.closeModal(modal, overlay);
+    domManipulator.closeModal(modal, overlay),
+    domManipulator.showToDos(todos, display);;
 });
 
 

@@ -1,3 +1,6 @@
+import { addDays, format, isEqual, isWithinInterval } from "date-fns";
+import parseISO from "date-fns/parseISO";
+
 
 export const domManipulator = (function () {
 
@@ -20,37 +23,53 @@ export const domManipulator = (function () {
 
     function showToDos(todos, element){
 
-
+        console.log(todos[todoManager.getCurrentProject()]);
         element.innerHTML = "";
 
 
-        if (todos[toDoManager.getCurrentProject()].length == 0) {
+        if (todos[todoManager.getCurrentProject()].length == 0) {
             return;
         }
 
-        for (let i = 0; i < todos[toDoManager.getCurrentProject()].length; i++) {
+        for (let i = 0; i < todos[todoManager.getCurrentProject()].length; i++) {
             const toDoContainer = document.createElement("li");
             toDoContainer.classList.add("to-do-container");
 
             
             const toDoCheck = document.createElement("div");
-            toDoCheck.classList.add("to-do-check unchecked");
+            toDoCheck.classList.add("to-do-check");
+            toDoCheck.classList.add("unchecked");
 
             const toDoTitle = document.createElement("div");
-            toDoTitle.innerHTML = todos[toDoManager.getCurrentProject()][i].name;
+            toDoTitle.innerHTML = todos[todoManager.getCurrentProject()][i].name;
             toDoTitle.classList.add("to-do-title");
 
-            // to do date //
 
             const toDoDetails = document.createElement("div");
-            toDoDetails.innerHTML = todos[toDoManager.getCurrentProject()][i].details;
+            toDoDetails.innerHTML = todos[todoManager.getCurrentProject()][i].details;
             toDoTitle.classList.add("to-do-details");
 
-            const toDoUrgent = document.createElement("div");
-            toDoCheck.classList.add("to-do-urgent urgent-unchecked");
 
-            todos[toDoManager.getCurrentProject()][i].index = i;
+            const toDoDate = document.createElement("div");
+            toDoDate.innerHTML = todoManager.formatDate(todos[todoManager.getCurrentProject()][i].date);
+            toDoDate.classList.add("to-do-date");
+
+            const toDoUrgent = document.createElement("div");
+            toDoCheck.classList.add("to-do-urgent");
+            toDoCheck.classList.add("urgent-unchecked");
+
+            todos[todoManager.getCurrentProject()][i].index = i;
+
+            toDoContainer.appendChild(toDoCheck);
+            toDoContainer.appendChild(toDoTitle);
+            toDoContainer.appendChild(toDoDetails);
+            toDoContainer.appendChild(toDoDate);
+            toDoContainer.appendChild(toDoUrgent);
+
+            element.appendChild(toDoContainer);
         }
+
+        return;
 
 
 
@@ -63,7 +82,8 @@ export const domManipulator = (function () {
 
     return {
         openModal,
-        closeModal
+        closeModal,
+        showToDos
     }
 })();
 
@@ -133,12 +153,24 @@ export const todoManager = (function () {
         return;
     }
 
+    function formatDate(date) {
+        let formattedDate;
+        if (!date) {
+            formattedDate = "No Due Date";
+        }
+        else{
+            formattedDate = date;
+        }
+        return formattedDate;
+    }
+
 
 
     return {
         getCurrentProject,
         changeCurrentProject,
-        newToDo
+        newToDo,
+        formatDate
     }
 
 
