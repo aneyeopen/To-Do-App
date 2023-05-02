@@ -20,18 +20,28 @@ export const domManipulator = (function () {
         return;
     }
 
+    function changeSideButton(selectedSideButton, currentSide, project) {
+        todoManager.changeCurrentProject(project),
+        currentSide.classList.remove("sidebar-active"),
+        console.log(currentSide)
+        currentSide = selectedSideButton,
+        currentSide.classList.add("sidebar-active");
+        
+        return currentSide;
+    }
+
 
     function showToDos(todos, element){
 
-        console.log(todos[todoManager.getCurrentProject()]);
+        console.log(todos[todoManager.currentProject]);
         element.innerHTML = "";
 
 
-        if (todos[todoManager.getCurrentProject()].length == 0) {
+        if (todos[todoManager.currentProject].length == 0) {
             return;
         }
 
-        for (let i = 0; i < todos[todoManager.getCurrentProject()].length; i++) {
+        for (let i = 0; i < todos[todoManager.currentProject].length; i++) {
             const toDoContainer = document.createElement("li");
             toDoContainer.classList.add("to-do-container");
 
@@ -41,75 +51,70 @@ export const domManipulator = (function () {
             toDoCheck.classList.add("unchecked");
 
             const toDoTitle = document.createElement("div");
-            toDoTitle.innerHTML = todos[todoManager.getCurrentProject()][i].name;
+            toDoTitle.innerHTML = todos[todoManager.currentProject][i].name;
             toDoTitle.classList.add("to-do-title");
 
 
             const toDoDetails = document.createElement("div");
-            toDoDetails.innerHTML = todos[todoManager.getCurrentProject()][i].details;
+            toDoDetails.innerHTML = todos[todoManager.currentProject][i].details;
             toDoTitle.classList.add("to-do-details");
 
 
             const toDoDate = document.createElement("div");
-            toDoDate.innerHTML = todoManager.formatDate(todos[todoManager.getCurrentProject()][i].date);
+            toDoDate.innerHTML = todoManager.formatDate(todos[todoManager.currentProject][i].date);
             toDoDate.classList.add("to-do-date");
 
-            const toDoUrgent = document.createElement("div");
-            toDoCheck.classList.add("to-do-urgent");
-            toDoCheck.classList.add("urgent-unchecked");
+            const toDoImportant = document.createElement("div");
+            toDoCheck.classList.add("to-do-important");
+            toDoCheck.classList.add("important-unchecked");
 
-            todos[todoManager.getCurrentProject()][i].index = i;
+            todos[todoManager.currentProject][i].index = i;
 
             toDoContainer.appendChild(toDoCheck);
             toDoContainer.appendChild(toDoTitle);
             toDoContainer.appendChild(toDoDetails);
             toDoContainer.appendChild(toDoDate);
-            toDoContainer.appendChild(toDoUrgent);
+            toDoContainer.appendChild(toDoImportant);
 
             element.appendChild(toDoContainer);
         }
 
         return;
 
-
-
-
-
-
-
-
     }
+
+
+
 
     return {
         openModal,
         closeModal,
-        showToDos
+        showToDos,
+        changeSideButton
     }
 })();
 
 export const todoManager = (function () {
 
     const currentProject = "all time";
+    
 
     const todoList = [];
 
-    function getCurrentProject() {
-        return currentProject;
-    }
 
-    function changeCurrentProject(newProject) {
-        currentProject = newProject
+    function changeCurrentProject(project) {
+        todoManager.currentProject = project;
     }
 
 
 
     // to do factory function
-    function todoFactory(name, date, details, urgent, project, checked=false, index) {
+    function todoFactory(name, date, details, important, project, checked=false, index) {
         return {
             name,
             date,
             details,
-            urgent,
+            important,
             project,
             checked,
             index
@@ -124,9 +129,9 @@ export const todoManager = (function () {
         const toDoTitle = (document.querySelector('#modal-to-do-title')).value;
         const toDoDetails = (document.querySelector('#modal-to-do-details')).value;
         const toDoDate = (document.querySelector('#to-do-date')).value;
-        const toDoPriority = (document.querySelector('[name="create-new__urgent"]:checked'));
+        const toDoPriority = (document.querySelector('[name="create-new__important"]:checked'));
 
-        const toDoProject = getCurrentProject();
+        const toDoProject = todoManager.currentProject;
 
         console.log(toDoPriority);
         console.log(toDoTitle);
@@ -142,15 +147,10 @@ export const todoManager = (function () {
             todoList["all time"].push(newToDo);
         }
 
-        if (toDoPriority === 'urgent') {
-            todoList["urgent"].push(newToDo);
+        if (toDoPriority === 'important') {
+            todoList["important"].push(newToDo);
         }
 
-    }
-
-    function indexToDo(todo, listIndex) {
-        todo.index = listIndex;
-        return;
     }
 
     function formatDate(date) {
@@ -167,11 +167,12 @@ export const todoManager = (function () {
 
 
     return {
-        getCurrentProject,
         changeCurrentProject,
+        currentProject,
         newToDo,
         formatDate
     }
+
 
 
 })();

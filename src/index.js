@@ -11,7 +11,7 @@ const todos = JSON.parse(localStorage.getItem('todos')) || {
     "urgent": []                                           
     };
 
-
+console.log(todoManager.currentProject);
 
 // main events //
 
@@ -45,8 +45,28 @@ form.addEventListener('submit', e => {
     domManipulator.showToDos(todos, display);;
 });
 
+// sidebar events //
 
+const allTimeSide = document.getElementById("all-time-sidebar");
+let currSideButton = allTimeSide;
+currSideButton.classList.add("sidebar-active");
+allTimeSide.addEventListener('click', e => {
+    currSideButton = domManipulator.changeSideButton(allTimeSide, currSideButton, "all time");
+})
+const todaySide = document.getElementById("today-sidebar");
+todaySide.addEventListener('click', e => {
+    currSideButton = domManipulator.changeSideButton(todaySide, currSideButton, "today");
+})
+const thisWeekSide = document.getElementById("this-week-sidebar");
+thisWeekSide.addEventListener('click', e => {
+    currSideButton = domManipulator.changeSideButton(thisWeekSide, currSideButton, "this week");
+})
+const importantSide = document.getElementById("important-sidebar");
+importantSide.addEventListener('click', e => {
+    currSideButton = domManipulator.changeSideButton(importantSide, currSideButton, "important");
+})
 
-
+console.log(todoManager.currentProject)
+console.log(todos[todoManager.currentProject])
 
 
