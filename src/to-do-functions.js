@@ -23,7 +23,6 @@ export const domManipulator = (function () {
     function changeSideButton(selectedSideButton, currentSide, project) {
         todoManager.changeCurrentProject(project),
         currentSide.classList.remove("sidebar-active"),
-        console.log(currentSide)
         currentSide = selectedSideButton,
         currentSide.classList.add("sidebar-active");
         
@@ -33,7 +32,6 @@ export const domManipulator = (function () {
 
     function showToDos(todos, element){
 
-        console.log(todos[todoManager.currentProject]);
         element.innerHTML = "";
 
 
@@ -65,6 +63,7 @@ export const domManipulator = (function () {
             toDoDate.classList.add("to-do-date");
 
             const toDoImportant = document.createElement("div");
+            
             toDoCheck.classList.add("to-do-important");
             toDoCheck.classList.add("important-unchecked");
 
@@ -129,26 +128,26 @@ export const todoManager = (function () {
         const toDoTitle = (document.querySelector('#modal-to-do-title')).value;
         const toDoDetails = (document.querySelector('#modal-to-do-details')).value;
         const toDoDate = (document.querySelector('#to-do-date')).value;
-        const toDoPriority = (document.querySelector('[name="create-new__important"]:checked'));
-
-        const toDoProject = todoManager.currentProject;
-
-        console.log(toDoPriority);
-        console.log(toDoTitle);
+        const toDoPriority = (document.getElementById("create-new__important").checked);
 
 
+        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, todoManager.currentProject, null);
 
-        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, toDoProject, null);
+       
+        
 
-
-        todoList[currentProject].push(newToDo);
-
-        if (toDoProject != "all time") {
+        if (todoManager.currentProject != "all time") {
             todoList["all time"].push(newToDo);
         }
 
-        if (toDoPriority === 'important') {
+        if (toDoPriority === true) {
             todoList["important"].push(newToDo);
+        }
+
+        if (todoManager.currentProject == "this week" || todoManager.currentProject == "today" || todoManager.currentProject == "important") {
+            return;
+        } else {
+            todoList[todoManager.currentProject].push(newToDo);
         }
 
     }

@@ -8,10 +8,9 @@ const todos = JSON.parse(localStorage.getItem('todos')) || {
     "all time": [],
     "today": [],
     "week": [],
-    "urgent": []                                           
+    "important": []                                           
     };
 
-console.log(todoManager.currentProject);
 
 // main events //
 
@@ -42,7 +41,8 @@ closeForm.addEventListener('click', e => domManipulator.closeModal(modal, overla
 form.addEventListener('submit', e => {
     todoManager.newToDo(e, todos, form); 
     domManipulator.closeModal(modal, overlay),
-    domManipulator.showToDos(todos, display);;
+    domManipulator.showToDos(todos, display);
+    
 });
 
 // sidebar events //
@@ -51,22 +51,24 @@ const allTimeSide = document.getElementById("all-time-sidebar");
 let currSideButton = allTimeSide;
 currSideButton.classList.add("sidebar-active");
 allTimeSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(allTimeSide, currSideButton, "all time");
+    currSideButton = domManipulator.changeSideButton(allTimeSide, currSideButton, "all time"),
+    domManipulator.showToDos(todos, display);
 })
 const todaySide = document.getElementById("today-sidebar");
 todaySide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(todaySide, currSideButton, "today");
+    currSideButton = domManipulator.changeSideButton(todaySide, currSideButton, "today"),
+    domManipulator.showToDos(todos, display);
 })
 const thisWeekSide = document.getElementById("this-week-sidebar");
 thisWeekSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(thisWeekSide, currSideButton, "this week");
+    currSideButton = domManipulator.changeSideButton(thisWeekSide, currSideButton, "this week"),
+    domManipulator.showToDos(todos, display);
 })
 const importantSide = document.getElementById("important-sidebar");
 importantSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(importantSide, currSideButton, "important");
+    currSideButton = domManipulator.changeSideButton(importantSide, currSideButton, "important"),
+    domManipulator.showToDos(todos, display);
 })
 
-console.log(todoManager.currentProject)
-console.log(todos[todoManager.currentProject])
 
 
