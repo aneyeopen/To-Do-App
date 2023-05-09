@@ -29,6 +29,37 @@ export const domManipulator = (function () {
         return currentSide;
     }
 
+    function addProjectInput(container) {
+
+        if (document.querySelector(".add-project-button")) {
+            return;
+        }
+        var projectForm = document.createElement('form');
+        projectForm.action = "";
+        var projectFormInput = document.createElement("textarea");
+        projectFormInput.name = "add-project";
+        projectFormInput.required = true;
+
+        var addProjectButton = document.createElement('input');
+        addProjectButton.type = 'submit';
+        addProjectButton.classList.add("add-project-button");
+        addProjectButton.value = "Add Project";
+
+        var cancelProjectButton = document.createElement("button");
+        cancelProjectButton.classList.add("cancel-project-button");
+        cancelProjectButton.innerText = "Cancel"
+
+        projectForm.appendChild(projectFormInput);
+        projectForm.appendChild(addProjectButton);
+        projectForm.appendChild(cancelProjectButton);
+
+        container.appendChild(projectForm);
+
+
+
+        
+    }
+
 
     function showToDos(todos, element){
 
@@ -89,6 +120,7 @@ export const domManipulator = (function () {
         openModal,
         closeModal,
         showToDos,
+        addProjectInput,
         changeSideButton
     }
 })();
@@ -133,7 +165,6 @@ export const todoManager = (function () {
 
         const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, todoManager.currentProject, null);
 
-       
         
 
         if (todoManager.currentProject != "all time") {
@@ -169,7 +200,7 @@ export const todoManager = (function () {
         changeCurrentProject,
         currentProject,
         newToDo,
-        formatDate
+        formatDate,
     }
 
 

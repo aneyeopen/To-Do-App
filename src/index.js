@@ -70,5 +70,9 @@ importantSide.addEventListener('click', e => {
     domManipulator.showToDos(todos, display);
 })
 
-
+const addProject = document.getElementById("add-project-sidebar");
+const addProjectDiv = document.getElementById("add-project-form");
+addProject.addEventListener('click', e => {
+    domManipulator.addProjectInput(addProjectDiv);
+})
 

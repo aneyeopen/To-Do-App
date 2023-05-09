@@ -17,10 +17,11 @@
             <div id="all-time-sidebar" class="sidebar-link clickable sidebar-active">All Time</div>
             <div id="today-sidebar" class="sidebar-link clickable">Today</div>
             <div id="this-week-sidebar" class="sidebar-link clickable">This Week</div>
-            <div id="this-week-sidebar" class="sidebar-link clickable">Urgent</div>
+            <div id="important-sidebar" class="sidebar-link clickable">Important</div>
             <div id="projects-sidebar" class="sidebar-projects-header">Projects</div>
             <div id="projects-container"></div>
-            <div id="add-project-sidebar" class="sidebar-link clickable">Add Project</div>
+            <div id="add-project-sidebar" class="add-project-link clickable">Add Project</div>
+            <div id="add-project-form"></div>
             
         </div>
     </div>
@@ -41,11 +42,6 @@
                 <div class="modal-title">Create New</div>
                 <div class="modal-close clickable">X</div>
             </div>
-            <div class="modal-sidebar">
-                <div id="modal-to-do" class="sidebar-link clickable modal-sidebar-active"></div>
-                <div id="modal-project" class="sidebar-link clickable"></div>
-                <div id="modal-note" class="sidebar-link clickable"></div>
-            </div>
             <div class="modal-main">
                 <textarea class="create-new__input" placeholder="Title"
                 id="modal-to-do-title" name="modal-to-do" maxlength="40" required></textarea>
@@ -60,12 +56,12 @@
                     name="modal-to-do-date">
                 </div>
 
-                <div class="create-new__urgent-container">
-                    <div class="create-new__urgent">
-                        <div class="create-new__urgent-title">Priority:</div>
-                        <input type="checkbox" id="create-new__urgent"
-                        name="create-new__urgent" value="urgent">
-                        <label for="create-new__urgent" class="create-new__urgent-button">Urgent</label>
+                <div class="create-new__important-container">
+                    <div class="create-new__important">
+                        <div class="create-new__important-title">Priority:</div>
+                        <input type="checkbox" id="create-new__important"
+                        name="create-new__important" value="important">
+                        <label for="create-new__important" class="create-new__important-button">Important</label>
 
                     </div>
                 </div>
