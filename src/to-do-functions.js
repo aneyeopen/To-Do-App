@@ -10,7 +10,7 @@ export const domManipulator = (function () {
         overlay.classList.remove("hidden");
         return;
     };
-
+    
     function closeModal(modal, overlay) {
         modal.classList.add("hidden");
         overlay.classList.add("hidden");
@@ -20,16 +20,22 @@ export const domManipulator = (function () {
         return;
     }
 
-    function changeSideButton(selectedSideButton, currentSide, project) {
-        todoManager.changeCurrentProject(project),
-        currentSide.classList.remove("sidebar-active"),
-        currentSide = selectedSideButton,
-        currentSide.classList.add("sidebar-active");
+    let currSideButton;
+
+    function changeSideButton(selectedSideButton, project) {
+        todoManager.changeCurrentProject(project)
+        console.log(domManipulator.currSideButton)
+        domManipulator.currSideButton.classList.remove("sidebar-active"),
+        domManipulator.currSideButton = selectedSideButton,
+        domManipulator.currSideButton.classList.add("sidebar-active");
         
-        return currentSide;
+        return domManipulator.currSideButton;
     }
 
-    function addProjectInput(container) {
+    function addProjectInput(container, projectContainer) {
+        
+        document.querySelector('.add-project-link').classList.add("sidebar-active");
+
 
         if (document.querySelector(".add-project-button")) {
             return;
@@ -39,11 +45,31 @@ export const domManipulator = (function () {
         var projectFormInput = document.createElement("textarea");
         projectFormInput.name = "add-project";
         projectFormInput.required = true;
+        projectFormInput.classList.add("add-project-input");
+        projectFormInput.placeholder = "Enter Project Name";
 
         var addProjectButton = document.createElement('input');
         addProjectButton.type = 'submit';
         addProjectButton.classList.add("add-project-button");
         addProjectButton.value = "Add Project";
+
+        projectForm.addEventListener("submit", e => {
+            e.preventDefault();
+            const inputValue = document.querySelector(".add-project-input").value;
+            const newProject = document.createElement('div')
+            newProject.innerHTML = inputValue;
+            newProject.classList.add("sidebar-link");
+            newProject.classList.add("clickable");
+
+            newProject.addEventListener("click", e => {
+                console.log(currSideButton)
+                changeSideButton(newProject, currSideButton, inputValue);
+            })
+
+            projectContainer.appendChild(newProject);
+            projectForm.innerHTML = '';
+
+        })
 
         var cancelProjectButton = document.createElement("button");
         cancelProjectButton.classList.add("cancel-project-button");
@@ -121,6 +147,7 @@ export const domManipulator = (function () {
         closeModal,
         showToDos,
         addProjectInput,
+        currSideButton,
         changeSideButton
     }
 })();

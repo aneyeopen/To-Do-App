@@ -48,31 +48,32 @@ form.addEventListener('submit', e => {
 // sidebar events //
 
 const allTimeSide = document.getElementById("all-time-sidebar");
-let currSideButton = allTimeSide;
-currSideButton.classList.add("sidebar-active");
+domManipulator.currSideButton = allTimeSide;
+domManipulator.currSideButton.classList.add("sidebar-active");
 allTimeSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(allTimeSide, currSideButton, "all time"),
+    domManipulator.currSideButton = domManipulator.changeSideButton(allTimeSide, "all time"),
     domManipulator.showToDos(todos, display);
 })
 const todaySide = document.getElementById("today-sidebar");
 todaySide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(todaySide, currSideButton, "today"),
+    domManipulator.currSideButton = domManipulator.changeSideButton(todaySide, "today"),
     domManipulator.showToDos(todos, display);
 })
 const thisWeekSide = document.getElementById("this-week-sidebar");
 thisWeekSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(thisWeekSide, currSideButton, "this week"),
+    domManipulator.currSideButton = domManipulator.changeSideButton(thisWeekSide, "this week"),
     domManipulator.showToDos(todos, display);
 })
 const importantSide = document.getElementById("important-sidebar");
 importantSide.addEventListener('click', e => {
-    currSideButton = domManipulator.changeSideButton(importantSide, currSideButton, "important"),
+    domManipulator.currSideButton = domManipulator.changeSideButton(importantSide, "important"),
     domManipulator.showToDos(todos, display);
 })
 
 const addProject = document.getElementById("add-project-sidebar");
 const addProjectDiv = document.getElementById("add-project-form");
+const projectsContainer = document.getElementById("projects-container")
 addProject.addEventListener('click', e => {
-    domManipulator.addProjectInput(addProjectDiv);
+    domManipulator.addProjectInput(addProjectDiv, projectsContainer);
 })
 
