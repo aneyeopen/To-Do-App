@@ -1,4 +1,4 @@
-import { addDays, format, isEqual, isWithinInterval } from "date-fns";
+import { addDays, format, isEqual, isWithinInterval, parse } from "date-fns";
 import parseISO from "date-fns/parseISO";
 
 
@@ -24,7 +24,6 @@ export const domManipulator = (function () {
 
     function changeSideButton(selectedSideButton, project) {
         todoManager.changeCurrentProject(project)
-        console.log(domManipulator.currSideButton)
         domManipulator.currSideButton.classList.remove("sidebar-active"),
         domManipulator.currSideButton = selectedSideButton,
         domManipulator.currSideButton.classList.add("sidebar-active");
@@ -61,14 +60,22 @@ export const domManipulator = (function () {
             newProject.classList.add("sidebar-link");
             newProject.classList.add("clickable");
 
+            const newProjectString = inputValue.toString();
+            const display = document.querySelector('.to-do-list');
+
+
             newProject.addEventListener("click", e => {
-                console.log(currSideButton)
-                changeSideButton(newProject, currSideButton, inputValue);
+                changeSideButton(newProject, newProjectString)
+                showToDos(todoManager.todos, display)
+                
             })
 
             projectContainer.appendChild(newProject);
             projectForm.innerHTML = '';
 
+
+            
+            todoManager.todos[inputValue.toString()] = [];
         })
 
         var cancelProjectButton = document.createElement("button");
@@ -116,7 +123,7 @@ export const domManipulator = (function () {
 
 
             const toDoDate = document.createElement("div");
-            toDoDate.innerHTML = todoManager.formatDate(todos[todoManager.currentProject][i].date);
+            toDoDate.innerHTML = dateManager.formatDate(todos[todoManager.currentProject][i].date);
             toDoDate.classList.add("to-do-date");
 
             const toDoImportant = document.createElement("div");
@@ -157,7 +164,12 @@ export const todoManager = (function () {
     const currentProject = "all time";
     
 
-    const todoList = [];
+    const todos = JSON.parse(localStorage.getItem('todos')) || {
+        "all time": [],
+        "today": [],
+        "this week": [],
+        "important": []                                           
+        };
 
 
     function changeCurrentProject(project) {
@@ -210,6 +222,23 @@ export const todoManager = (function () {
 
     }
 
+    
+
+
+
+    return {
+        changeCurrentProject,
+        currentProject,
+        newToDo,
+        todos
+    }
+
+
+
+})();
+
+export const dateManager = (function () {
+
     function formatDate(date) {
         let formattedDate;
         if (!date) {
@@ -221,15 +250,31 @@ export const todoManager = (function () {
         return formattedDate;
     }
 
+    
+
+    function sortWithinWeek() {
+
+        const todayDate = new Date();
+        const todayFormatted = format(todayDate, 'dd-MM-yyyy');
+        const weekFromToday = addDays(todayDate, 7);
+        const weekFromTodayFormatted = format(weekFromToday, 'dd-MM-yyyy');
+        console.log(todoManager.todos)
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            let parsedDate = new Date().parseISO(todoManager.todos["all time"][i].date)
+            console.log(parsedDate);
+            console.log(isWithinInterval(parsedDate, {start: todayFormatted, end: weekFromTodayFormatted}))
+            if (isWithinInterval(parsedDate, {start: parse(todayFormatted), end: parse(weekFromTodayFormatted)}) == true) {
+                todoManager.todos["this week"].push(todos[i]);
+            }
+    }
+}
+
+    
 
 
     return {
-        changeCurrentProject,
-        currentProject,
-        newToDo,
         formatDate,
+        sortWithinWeek
     }
-
-
 
 })();
