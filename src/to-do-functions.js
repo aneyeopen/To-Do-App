@@ -98,6 +98,8 @@ export const domManipulator = (function () {
 
         element.innerHTML = "";
 
+        dateManager.sortWithinWeek(todoManager.todos)
+
 
         if (todos[todoManager.currentProject].length == 0) {
             return;
@@ -141,6 +143,8 @@ export const domManipulator = (function () {
 
             element.appendChild(toDoContainer);
         }
+
+        todos["this week"] = [];
 
         return;
 
@@ -255,16 +259,15 @@ export const dateManager = (function () {
     function sortWithinWeek() {
 
         const todayDate = new Date();
-        const todayFormatted = format(todayDate, 'dd-MM-yyyy');
+        const todayFormatted = format(todayDate, "yyyy-MM-dd");
         const weekFromToday = addDays(todayDate, 7);
-        const weekFromTodayFormatted = format(weekFromToday, 'dd-MM-yyyy');
-        console.log(todoManager.todos)
+        const weekFromTodayFormatted = format(weekFromToday, "yyyy-MM-dd");
         for (let i = 0; i < todoManager.todos["all time"].length; i++) {
-            let parsedDate = new Date().parseISO(todoManager.todos["all time"][i].date)
-            console.log(parsedDate);
-            console.log(isWithinInterval(parsedDate, {start: todayFormatted, end: weekFromTodayFormatted}))
-            if (isWithinInterval(parsedDate, {start: parse(todayFormatted), end: parse(weekFromTodayFormatted)}) == true) {
-                todoManager.todos["this week"].push(todos[i]);
+            if (todoManager.todos["all time"][i] != "No Due Date"){
+                let parsedDate = parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date())
+                if (isWithinInterval(parsedDate, {start: parse(todayFormatted, "yyyy-MM-dd", new Date()), end: parse(weekFromTodayFormatted, "yyyy-MM-dd", new Date())})) {
+                    todoManager.todos["this week"].push(todoManager.todos["all time"][i]);
+                }
             }
     }
 }

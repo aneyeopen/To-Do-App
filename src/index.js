@@ -57,9 +57,7 @@ todaySide.addEventListener('click', e => {
 const thisWeekSide = document.getElementById("this-week-sidebar");
 thisWeekSide.addEventListener('click', e => {
     domManipulator.currSideButton = domManipulator.changeSideButton(thisWeekSide, "this week"),
-    dateManager.sortWithinWeek(todoManager.todos),
     domManipulator.showToDos(todoManager.todos, display);
-    console.log(todoManager.todos)
 })
 const importantSide = document.getElementById("important-sidebar");
 importantSide.addEventListener('click', e => {
