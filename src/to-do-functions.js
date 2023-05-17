@@ -1,5 +1,4 @@
-import { addDays, format, isEqual, isWithinInterval, parse } from "date-fns";
-import parseISO from "date-fns/parseISO";
+import { addDays, format, isEqual, isWithinInterval, parse, isSameDay } from "date-fns";
 
 
 export const domManipulator = (function () {
@@ -98,7 +97,8 @@ export const domManipulator = (function () {
 
         element.innerHTML = "";
 
-        dateManager.sortWithinWeek(todoManager.todos)
+        dateManager.sortWithinWeek(todoManager.todos);
+        dateManager.sortToday(todoManager.todos)
 
 
         if (todos[todoManager.currentProject].length == 0) {
@@ -143,8 +143,12 @@ export const domManipulator = (function () {
 
             element.appendChild(toDoContainer);
         }
-
+        console.log(todoManager.todos)
         todos["this week"] = [];
+        todos["today"] = [];
+        console.log(todoManager.todos)
+        console.log(todoManager.currentProject)
+
 
         return;
 
@@ -269,15 +273,29 @@ export const dateManager = (function () {
                     todoManager.todos["this week"].push(todoManager.todos["all time"][i]);
                 }
             }
+        }
     }
-}
+
+    function sortToday() {
+        const todayDate = new Date();
+        const todayFormatted = format(todayDate, "yyyy-MM-dd");
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            if (todoManager.todos["all time"][i] != "No Due Date"){
+                let parsedDate = parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date());
+                if (isSameDay(parse(todayFormatted, "yyyy-MM-dd", new Date()), parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date()))) {
+                    todoManager.todos["today"].push(todoManager.todos["all time"][i]);
+                }
+            }
+        }
+    }
 
     
 
 
     return {
         formatDate,
-        sortWithinWeek
+        sortWithinWeek,
+        sortToday
     }
 
 })();
