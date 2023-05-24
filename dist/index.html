@@ -44,11 +44,11 @@
             </div>
             <div class="modal-main">
                 <textarea class="create-new__input" placeholder="Title"
-                id="modal-to-do-title" name="modal-to-do" maxlength="40" required></textarea>
+                id="modal-to-do-title" name="modal-to-do" maxlength="40" style="resize: none" required></textarea>
                 <textarea class="create-new__input create-new-input-large"
                 placeholder="Details" id="modal-to-do-details"
-                name="modal-to-do"></textarea>
-                <input type="submit" class="create-new__to-do-submit" id="to-do-submit" value="Add To Do">
+                name="modal-to-do" style="resize: none"></textarea>
+                
 
                 <div class="create-new__date">
                     <div class="create-new__date-title">Due Date:</div>
@@ -62,8 +62,9 @@
                         <input type="checkbox" id="create-new__important"
                         name="create-new__important" value="important">
                         <label for="create-new__important" class="create-new__important-button">Important</label>
-
+                        
                     </div>
+                    <input type="submit" class="create-new__to-do-submit" id="to-do-submit" value="Add To Do">
                 </div>
 
             </div>
