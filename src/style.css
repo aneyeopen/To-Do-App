@@ -56,31 +56,85 @@ body {
 .modal-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding-bottom: 15px;
-    width: 100%;
+    width: 75vh;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 .modal-main {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between ;
+    align-items: space-around;
+    justify-content: center ;
     flex: 1;
+    width: 75vh;
 }
 
 input[type=text],
 textarea,
 input[type=date]{
     width:100%;
+    display: flex;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: white;
+    border: solid 2px #273746;
+    border-radius: 3px;
+    margin: 15px;
+}
+
+.create-new-input-large{
+    height: 100px;
 }
 
 .create-new__important {
     display: flex;
-    flex-direction: row !important;
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: flex-start;
+}
+
+.create-new__date-title {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+}
+
+.create-new__date {
+        display: flex;
+        flex-direction: row;
+        align-items: center !important;
+        justify-content: flex-start;
+
+}
+
+.date-important{
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    margin: 15px;
+    justify-content: space-evenly;
+    padding-right: 25px;
+    margin: 10px;
+}
+
+.create-new__to-do-submit,
+.modal-close {
+    width: 100px;
+    height: 40px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .sidebar {

@@ -40,7 +40,6 @@
         <form action="" class="create-new" id="create-new-form">
             <div class="modal-header">
                 <div class="modal-title">Create New</div>
-                <div class="modal-close clickable">X</div>
             </div>
             <div class="modal-main">
                 <textarea class="create-new__input" placeholder="Title"
@@ -49,7 +48,7 @@
                 placeholder="Details" id="modal-to-do-details"
                 name="modal-to-do" style="resize: none"></textarea>
                 
-
+<div class="date-important">
                 <div class="create-new__date">
                     <div class="create-new__date-title">Due Date:</div>
                     <input type="date" class="create-new__date-input" id="to-do-date"
@@ -58,14 +57,19 @@
 
                 <div class="create-new__important-container">
                     <div class="create-new__important">
-                        <div class="create-new__important-title">Priority:</div>
+                        <div class="create-new__important-title"></div>
                         <input type="checkbox" id="create-new__important"
                         name="create-new__important" value="important">
                         <label for="create-new__important" class="create-new__important-button">Important</label>
                         
                     </div>
-                    <input type="submit" class="create-new__to-do-submit" id="to-do-submit" value="Add To Do">
+
                 </div>
+            </div>
+            <div class="modal-buttons">
+                    <input type="submit" class="create-new__to-do-submit" id="to-do-submit" value="Add To Do">
+                    <button class="modal-close clickable">Cancel</button>
+            </div>
 
             </div>
         </form>
