@@ -135,7 +135,7 @@ export const domManipulator = (function () {
 
 
             const toDoDate = document.createElement("div");
-            toDoDate.innerHTML = dateManager.formatDate(todos[todoManager.currentProject][i].date);
+            toDoDate.innerHTML = `Due: ${dateManager.formatDate(todos[todoManager.currentProject][i].date)}`;
             toDoDate.classList.add("to-do-date");
 
             const toDoImportant = document.createElement("div");
@@ -144,12 +144,25 @@ export const domManipulator = (function () {
             toDoCheck.classList.add("important-unchecked");
 
             todos[todoManager.currentProject][i].index = i;
+            
+            const toDoDelete = document.createElement("div");
+            toDoDelete.innerHTML = "X";
+            toDoDelete.classList.add("to-do-delete");
+
+            const toDoTextContainer = document.createElement("div");
+            toDoTextContainer.classList.add("to-do-text");
+
+            const toDoOptions = document.createElement("div");
+            toDoOptions.classList.add("to-do-options");
 
             toDoContainer.appendChild(toDoCheck);
-            toDoContainer.appendChild(toDoTitle);
-            toDoContainer.appendChild(toDoDetails);
-            toDoContainer.appendChild(toDoDate);
-            toDoContainer.appendChild(toDoImportant);
+            toDoTextContainer.appendChild(toDoTitle);
+            toDoTextContainer.appendChild(toDoDetails);
+            toDoContainer.appendChild(toDoTextContainer);
+            toDoOptions.appendChild(toDoDelete);
+            toDoOptions.appendChild(toDoDate);
+            toDoOptions.appendChild(toDoImportant);
+            toDoContainer.appendChild(toDoOptions);
 
             element.appendChild(toDoContainer);
         }
