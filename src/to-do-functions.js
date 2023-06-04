@@ -85,6 +85,11 @@ export const domManipulator = (function () {
         projectForm.appendChild(addProjectButton);
         projectForm.appendChild(cancelProjectButton);
 
+        cancelProjectButton.addEventListener("click", e => {
+            projectForm.reset();
+            projectForm.innerHTML = '';
+        })
+
         container.appendChild(projectForm);
 
 
@@ -96,6 +101,8 @@ export const domManipulator = (function () {
     function showToDos(todos, element){
 
         element.innerHTML = "";
+
+        dateManager.clearDateLists();
 
         dateManager.sortWithinWeek(todoManager.todos);
         dateManager.sortToday(todoManager.todos)
@@ -182,6 +189,20 @@ export const todoManager = (function () {
 
     function changeCurrentProject(project) {
         todoManager.currentProject = project;
+
+        const projectHeader = document.querySelector(".main-current-project");
+        if (todoManager.currentProject == "all time" || todoManager.currentProject == "today" || 
+        todoManager.currentProject == "this week" || todoManager.currentProject == "important"){
+
+            const words = todoManager.currentProject.split(" ");
+
+            projectHeader.innerHTML = words.map((word) => { 
+                return word[0].toUpperCase() + word.substring(1); 
+            }).join(" ");
+    }else {
+        projectHeader.innerHTML = todoManager.currentProject;
+    }
+
     }
 
 
@@ -275,8 +296,14 @@ export const dateManager = (function () {
             }
         }
     }
+    
+    function clearDateLists() {
+        todoManager.todos["today"] = [];
+        todoManager.todos["this week"] = [];
+    }
 
     function sortToday() {
+        
         const todayDate = new Date();
         const todayFormatted = format(todayDate, "yyyy-MM-dd");
         for (let i = 0; i < todoManager.todos["all time"].length; i++) {
@@ -295,7 +322,8 @@ export const dateManager = (function () {
     return {
         formatDate,
         sortWithinWeek,
-        sortToday
+        sortToday,
+        clearDateLists
     }
 
 })();
