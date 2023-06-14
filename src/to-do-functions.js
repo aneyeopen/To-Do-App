@@ -101,12 +101,15 @@ export const domManipulator = (function () {
 
         element.innerHTML = "";
 
-
+        todoManager.indexArray()
         dateManager.clearDateLists();
+        dateManager.sortWithinWeek();
+        dateManager.sortToday();
+        todoManager.sortImportant();
+        todoManager.sortCurrentProject();
 
-        dateManager.sortWithinWeek(todoManager.todos);
-        dateManager.sortToday(todoManager.todos)
-
+        
+        console.log(todos)
 
         if (todos[todoManager.currentProject].length == 0) {
             return;
@@ -121,7 +124,7 @@ export const domManipulator = (function () {
             toDoCheck.classList.add("to-do-check");
             toDoCheck.classList.add("unchecked");
             toDoCheck.addEventListener("click", e => {
-                todoManager.checkToDo(toDoCheck)
+                todoManager.checkToDo(toDoCheck, todos[todoManager.currentProject][i])
             })
 
             const toDoTitle = document.createElement("div");
@@ -143,11 +146,29 @@ export const domManipulator = (function () {
             toDoCheck.classList.add("to-do-important");
             toDoCheck.classList.add("important-unchecked");
 
-            todos[todoManager.currentProject][i].index = i;
+            
             
             const toDoDelete = document.createElement("div");
             toDoDelete.innerHTML = "X";
             toDoDelete.classList.add("to-do-delete");
+            toDoDelete.addEventListener("click", e => {
+                console.log(todos[todoManager.currentProject][i].index)
+                let tempIndex = todos[todoManager.currentProject][i].index;
+                if(todos[todoManager.currentProject][i].project != undefined) {
+                    for (let k = 0; k < todos[[todos[todoManager.currentProject][i].project]].length; k++) {
+                        if (todos[[todos[todoManager.currentProject][i].project]][k].index == todos[todoManager.currentProject][i].index){
+                            
+                            todos[todos[todoManager.currentProject][i].project] = todoManager.removeFromArray(k, todos[todos[todoManager.currentProject][i].project]);
+                            todos["all time"] = todoManager.removeFromArray(tempIndex, todos["all time"]);
+                        }
+                        break;
+                    }
+                }else {todos["all time"] = todoManager.removeFromArray(tempIndex, todos["all time"]);}
+                
+                
+                    showToDos(todoManager.todos, document.querySelector('.to-do-list'));
+        
+            })
 
             const toDoTextContainer = document.createElement("div");
             toDoTextContainer.classList.add("to-do-text");
@@ -166,9 +187,6 @@ export const domManipulator = (function () {
 
             element.appendChild(toDoContainer);
         }
-        todos["this week"] = [];
-        todos["today"] = [];
-        console.log(todoManager.todos)
         
 
 
@@ -193,7 +211,7 @@ export const todoManager = (function () {
 
     const currentProject = "all time";
     
-    const tempToDo = todoFactory("fart", "2023-06-07", "these are pretty important", true, false, null)
+    const tempToDo = todoFactory("fart", "2023-06-12", "these are pretty important", true, false, undefined)
     const todos = JSON.parse(localStorage.getItem('todos')) || {
         "all time": [tempToDo],
         "today": [],
@@ -220,16 +238,19 @@ export const todoManager = (function () {
 
     }
 
+    
+
 
 
     // to do factory function
-    function todoFactory(name, date, details, important, checked, index) {
+    function todoFactory(name, date, details, important, checked, project, index) {
         return {
             name,
             date,
             details,
             important,
             checked,
+            project,
             index
         }
     };
@@ -244,39 +265,72 @@ export const todoManager = (function () {
         const toDoDate = (document.querySelector('#to-do-date')).value;
         const toDoPriority = (document.getElementById("create-new__important").checked);
 
+        let toDoProject = undefined;
+        if (todoManager.currentProject != "all time" &&
+            todoManager.currentProject != "today" &&
+            todoManager.currentProject != "this week" &&
+            todoManager.currentProject != "important") {
+                toDoProject = todoManager.currentProject;
+            }
+        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, false, toDoProject);
 
-        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, false);
+
+    
+            todoList["all time"].push(newToDo);
+        
 
         
 
-        if (todoManager.currentProject != "all time") {
-            todoList["all time"].push(newToDo);
-        }
-
-        if (toDoPriority === true) {
-            todoList["important"].push(newToDo);
-        }
-
-        if (todoManager.currentProject == "this week" || todoManager.currentProject == "today" || todoManager.currentProject == "important") {
-            return;
-        } else {
-            todoList[todoManager.currentProject].push(newToDo);
-        }
-
+        
     }
 
-    function checkToDo(checkDiv) {
-        if (checkDiv.classList.contains("checked")) {
+    function checkToDo(checkDiv, todo) {
+        if (todo.checked == true) {
             checkDiv.classList.remove("checked");
             checkDiv.classList.add("unchecked");
+            todo.checked = false;
         } else {
             checkDiv.classList.remove("unchecked");
             checkDiv.classList.add("checked")
+            todo.checked = true;
         }
 
     }
 
-    
+    function removeFromArray(index, array) {
+        const halfBeforeTheUnwantedElement = array.slice(0,index);
+        const indexPlusOne = index + 1;
+        const halfAfterTheUnwantedElement = array.slice(indexPlusOne);
+        const poppedArray = halfBeforeTheUnwantedElement.concat(halfAfterTheUnwantedElement);
+        return poppedArray;
+    }
+
+    function sortImportant() {
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            if (todoManager.todos["all time"][i].important === true) {
+                todoManager.todos["important"].push(todoManager.todos["all time"][i]);
+            }
+        }
+    }
+
+    function indexArray() {
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            todoManager.todos["all time"][i].index = i;
+        }
+    }
+
+    function sortCurrentProject() {
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            if (todoManager.currentProject != "all time" &&
+                todoManager.currentProject != "today" &&
+                todoManager.currentProject != "this week" &&
+                todoManager.currentProject != "important") {
+                if (todoManager.todos["all time"][i].project != undefined) {
+                    todos[todoManager.currentProject].push(todoManager.todos["all time"][i])
+                }
+            }
+        }
+    }
 
 
 
@@ -285,7 +339,11 @@ export const todoManager = (function () {
         currentProject,
         newToDo,
         todos,
-        checkToDo
+        checkToDo,
+        sortImportant,
+        removeFromArray,
+        indexArray,
+        sortCurrentProject
     }
 
 
@@ -314,7 +372,7 @@ export const dateManager = (function () {
         const weekFromToday = addDays(todayDate, 7);
         const weekFromTodayFormatted = format(weekFromToday, "yyyy-MM-dd");
         for (let i = 0; i < todoManager.todos["all time"].length; i++) {
-            if (todoManager.todos["all time"][i] != "No Due Date"){
+            if (todoManager.todos["all time"][i].date != "No Due Date"){
                 let parsedDate = parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date())
                 if (isWithinInterval(parsedDate, {start: parse(todayFormatted, "yyyy-MM-dd", new Date()), end: parse(weekFromTodayFormatted, "yyyy-MM-dd", new Date())})) {
                     todoManager.todos["this week"].push(todoManager.todos["all time"][i]);
@@ -326,14 +384,17 @@ export const dateManager = (function () {
     function clearDateLists() {
         todoManager.todos["today"] = [];
         todoManager.todos["this week"] = [];
-    }
+        todoManager.todos["important"] = [];
+        if (todoManager.currentProject != "all time") {
+            todoManager.todos[todoManager.currentProject] = [];}
+        }
 
     function sortToday() {
         
         const todayDate = new Date();
         const todayFormatted = format(todayDate, "yyyy-MM-dd");
         for (let i = 0; i < todoManager.todos["all time"].length; i++) {
-            if (todoManager.todos["all time"][i] != "No Due Date"){
+            if (todoManager.todos["all time"][i].date != "No Due Date"){
                 let parsedDate = parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date());
                 if (isSameDay(parse(todayFormatted, "yyyy-MM-dd", new Date()), parse(todoManager.todos["all time"][i].date, "yyyy-MM-dd", new Date()))) {
                     todoManager.todos["today"].push(todoManager.todos["all time"][i]);
