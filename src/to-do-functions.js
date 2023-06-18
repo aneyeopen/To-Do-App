@@ -80,9 +80,13 @@ export const domManipulator = (function () {
         cancelProjectButton.classList.add("cancel-project-button");
         cancelProjectButton.innerText = "Cancel"
 
+        var buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("project-button-container")
+
         projectForm.appendChild(projectFormInput);
-        projectForm.appendChild(addProjectButton);
-        projectForm.appendChild(cancelProjectButton);
+        buttonContainer.appendChild(addProjectButton);
+        buttonContainer.appendChild(cancelProjectButton);
+        projectForm.appendChild(buttonContainer);
 
         cancelProjectButton.addEventListener("click", e => {
             projectForm.reset();
@@ -100,6 +104,7 @@ export const domManipulator = (function () {
     function showToDos(todos, element){
 
         element.innerHTML = "";
+        console.log(todos)
 
         todoManager.indexArray()
         dateManager.clearDateLists();
@@ -109,7 +114,7 @@ export const domManipulator = (function () {
         todoManager.sortCurrentProject();
 
         
-        console.log(todos)
+        
 
         if (todos[todoManager.currentProject].length == 0) {
             return;
@@ -118,13 +123,13 @@ export const domManipulator = (function () {
         for (let i = 0; i < todos[todoManager.currentProject].length; i++) {
             const toDoContainer = document.createElement("li");
             toDoContainer.classList.add("to-do-container");
+            
 
             
             const toDoCheck = document.createElement("div");
             toDoCheck.classList.add("to-do-check");
-            toDoCheck.classList.add("unchecked");
             toDoCheck.addEventListener("click", e => {
-                todoManager.checkToDo(toDoCheck, todos[todoManager.currentProject][i])
+                todoManager.checkToDo(toDoCheck, todos[todoManager.currentProject][i], toDoContainer)
             })
 
             const toDoTitle = document.createElement("div");
@@ -134,8 +139,16 @@ export const domManipulator = (function () {
 
             const toDoDetails = document.createElement("div");
             toDoDetails.innerHTML = todos[todoManager.currentProject][i].details;
-            toDoTitle.classList.add("to-do-details");
+            toDoDetails.classList.add("to-do-details");
 
+            
+            const toDoProject = document.createElement("div");
+            if (todos[todoManager.currentProject][i].project != undefined){
+            toDoProject.innerHTML = `Project: ${dateManager.formatDate(todos[todoManager.currentProject][i].project)}`;
+            } else {
+                toDoProject.innerHTML = "No Project";
+            }
+            toDoProject.classList.add("to-do-project");
 
             const toDoDate = document.createElement("div");
             toDoDate.innerHTML = `Due: ${dateManager.formatDate(todos[todoManager.currentProject][i].date)}`;
@@ -144,7 +157,11 @@ export const domManipulator = (function () {
             const toDoImportant = document.createElement("div");
             
             toDoCheck.classList.add("to-do-important");
-            toDoCheck.classList.add("important-unchecked");
+            if (todos[todoManager.currentProject][i].check === true) {
+                toDoContainer.classList.add("container-checked")
+                toDoCheck.classList.add("checked");
+            }else {toDoCheck.classList.add("unchecked");}
+            
 
             
             
@@ -152,7 +169,6 @@ export const domManipulator = (function () {
             toDoDelete.innerHTML = "X";
             toDoDelete.classList.add("to-do-delete");
             toDoDelete.addEventListener("click", e => {
-                console.log(todos[todoManager.currentProject][i].index)
                 let tempIndex = todos[todoManager.currentProject][i].index;
                 if(todos[todoManager.currentProject][i].project != undefined) {
                     for (let k = 0; k < todos[[todos[todoManager.currentProject][i].project]].length; k++) {
@@ -181,6 +197,7 @@ export const domManipulator = (function () {
             toDoTextContainer.appendChild(toDoDetails);
             toDoContainer.appendChild(toDoTextContainer);
             toDoOptions.appendChild(toDoDelete);
+            toDoOptions.appendChild(toDoProject);
             toDoOptions.appendChild(toDoDate);
             toDoOptions.appendChild(toDoImportant);
             toDoContainer.appendChild(toDoOptions);
@@ -211,7 +228,7 @@ export const todoManager = (function () {
 
     const currentProject = "all time";
     
-    const tempToDo = todoFactory("fart", "2023-06-12", "these are pretty important", true, false, undefined)
+    const tempToDo = todoFactory("fart", "2023-06-12", "these are pretty important", true, false, undefined, false)
     const todos = JSON.parse(localStorage.getItem('todos')) || {
         "all time": [tempToDo],
         "today": [],
@@ -243,13 +260,13 @@ export const todoManager = (function () {
 
 
     // to do factory function
-    function todoFactory(name, date, details, important, checked, project, index) {
+    function todoFactory(name, date, details, important, check, project, index) {
         return {
             name,
             date,
             details,
             important,
-            checked,
+            check,
             project,
             index
         }
@@ -265,6 +282,8 @@ export const todoManager = (function () {
         const toDoDate = (document.querySelector('#to-do-date')).value;
         const toDoPriority = (document.getElementById("create-new__important").checked);
 
+        
+
         let toDoProject = undefined;
         if (todoManager.currentProject != "all time" &&
             todoManager.currentProject != "today" &&
@@ -272,9 +291,9 @@ export const todoManager = (function () {
             todoManager.currentProject != "important") {
                 toDoProject = todoManager.currentProject;
             }
-        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, false, toDoProject);
-
-
+        const newToDo = todoFactory(toDoTitle, toDoDate, toDoDetails, toDoPriority, false, toDoProject, false);
+            newToDo.check = false;
+            console.log(newToDo)
     
             todoList["all time"].push(newToDo);
         
@@ -284,16 +303,25 @@ export const todoManager = (function () {
         
     }
 
-    function checkToDo(checkDiv, todo) {
-        if (todo.checked == true) {
-            checkDiv.classList.remove("checked");
-            checkDiv.classList.add("unchecked");
-            todo.checked = false;
-        } else {
-            checkDiv.classList.remove("unchecked");
-            checkDiv.classList.add("checked")
-            todo.checked = true;
+    function checkToDo(checkDiv, todo, container) {
+        let tempIndex = todo.index
+        for (let i=0 ; i < todoManager.todos["all time"].length; i++){
+            if (todoManager.todos["all time"][i].index  === todo.index){
+                if (todo.check == true) {
+                    checkDiv.classList.remove("checked");
+                    checkDiv.classList.add("unchecked");
+                    container.classList.remove("container-checked")
+                    todoManager.todos["all time"][i].check = false;
+                } else {
+                    checkDiv.classList.remove("unchecked");
+                    checkDiv.classList.add("checked")
+                    container.classList.add("container-checked")
+                    todoManager.todos["all time"][i].check = true;
+                }
+            }
+            console.log(todoManager.todos)
         }
+        
 
     }
 
