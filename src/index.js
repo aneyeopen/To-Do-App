@@ -72,3 +72,5 @@ addProject.addEventListener('click', e => {
     domManipulator.addProjectInput(addProjectDiv, projectsContainer);
 })
 
+domManipulator.regainProjects(projectsContainer);
+

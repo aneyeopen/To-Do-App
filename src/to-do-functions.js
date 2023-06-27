@@ -100,6 +100,38 @@ export const domManipulator = (function () {
         
     }
 
+    function regainProjects(projectContainer) {
+        let listedProjects = [];
+        
+        for (let i = 0; i < todoManager.todos["all time"].length; i++) {
+            if ( todoManager.todos["all time"][i].project != undefined) {
+                if (listedProjects.includes(todoManager.todos["all time"][i].project) === false){
+                    const newProject = document.createElement('div')
+                    newProject.innerHTML = todoManager.todos["all time"][i].project;
+                    newProject.classList.add("sidebar-link");
+                    newProject.classList.add("clickable");
+
+                    const newProjectString = todoManager.todos["all time"][i].project.toString();
+                    const display = document.querySelector('.to-do-list');
+
+
+                    newProject.addEventListener("click", e => {
+                    changeSideButton(newProject, newProjectString)
+                    showToDos(todoManager.todos, display)
+                
+                    })
+
+                    projectContainer.appendChild(newProject);
+
+            
+                    todoManager.todos[todoManager.todos["all time"][i].project.toString()] = [];
+                }
+                
+            }
+        }
+    }
+
+
 
     function showToDos(todos, element){
 
@@ -183,6 +215,8 @@ export const domManipulator = (function () {
                 
                 
                     showToDos(todoManager.todos, document.querySelector('.to-do-list'));
+                    todoManager.saveToLocalStorage();
+
         
             })
 
@@ -220,7 +254,8 @@ export const domManipulator = (function () {
         showToDos,
         addProjectInput,
         currSideButton,
-        changeSideButton
+        changeSideButton,
+        regainProjects
     }
 })();
 
@@ -235,6 +270,11 @@ export const todoManager = (function () {
         "this week": [],
         "important": []                                           
         };
+
+        function saveToLocalStorage(){
+            localStorage.setItem("todos", JSON.stringify(todos));
+            console.log("savSed")
+        }
 
 
     function changeCurrentProject(project) {
@@ -296,7 +336,7 @@ export const todoManager = (function () {
             console.log(newToDo)
     
             todoList["all time"].push(newToDo);
-        
+            saveToLocalStorage();
 
         
 
@@ -371,7 +411,8 @@ export const todoManager = (function () {
         sortImportant,
         removeFromArray,
         indexArray,
-        sortCurrentProject
+        sortCurrentProject,
+        saveToLocalStorage
     }
 
 
